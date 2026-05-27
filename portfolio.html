@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Adnan Khusagy — Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #0a0a08;
+    --bg2: #111110;
+    --bg3: #1a1a18;
+    --fg: #f0ede6;
+    --fg2: #9a9790;
+    --fg3: #5a5852;
+    --accent: #c8f55a;
+    --accent2: #7fff6a;
+    --border: rgba(240,237,230,0.08);
+    --border2: rgba(240,237,230,0.14);
+    --font-head: 'Syne', sans-serif;
+    --font-mono: 'DM Mono', monospace;
+  }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--fg); font-family: var(--font-head); overflow-x: hidden; cursor: none; }
+
+  #cursor { position: fixed; width: 12px; height: 12px; background: var(--accent); border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%,-50%); transition: width .2s,height .2s; mix-blend-mode: exclusion; }
+  #cursor-ring { position: fixed; width: 36px; height: 36px; border: 1px solid rgba(200,245,90,.4); border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%,-50%); transition: left .12s ease,top .12s ease; }
+  body:has(a:hover) #cursor, body:has(button:hover) #cursor { width: 20px; height: 20px; }
+
+  body::before { content:''; position:fixed; inset:0; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E"); opacity:.035; pointer-events:none; z-index:1; }
+
+  nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:1.5rem 2.5rem; border-bottom:1px solid transparent; transition:border-color .3s,background .3s; }
+  nav.scrolled { background:rgba(10,10,8,.85); backdrop-filter:blur(12px); border-color:var(--border); }
+  .nav-logo { font-size:1.1rem; font-weight:800; letter-spacing:-.02em; color:var(--fg); text-decoration:none; }
+  .nav-logo span { color:var(--accent); }
+  .nav-links { display:flex; gap:2rem; list-style:none; }
+  .nav-links a { font-family:var(--font-mono); font-size:.8rem; color:var(--fg2); text-decoration:none; letter-spacing:.04em; transition:color .2s; }
+  .nav-links a:hover { color:var(--accent); }
+  .nav-cta { font-family:var(--font-mono); font-size:.75rem; letter-spacing:.06em; text-transform:uppercase; color:var(--accent); border:1px solid var(--accent); padding:.5rem 1.2rem; border-radius:2px; text-decoration:none; transition:background .2s,color .2s; }
+  .nav-cta:hover { background:var(--accent); color:var(--bg); }
+
+  #hero { min-height:100vh; display:flex; flex-direction:column; justify-content:flex-end; padding:0 2.5rem 4rem; position:relative; overflow:hidden; }
+  .hero-grid-bg { position:absolute; inset:0; background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px); background-size:80px 80px; mask-image:linear-gradient(to bottom,transparent 0%,rgba(0,0,0,.4) 30%,rgba(0,0,0,.4) 70%,transparent 100%); }
+  .hero-tag { font-family:var(--font-mono); font-size:.75rem; color:var(--accent); letter-spacing:.12em; text-transform:uppercase; margin-bottom:1.5rem; display:flex; align-items:center; gap:.75rem; }
+  .hero-tag::before { content:''; display:block; width:32px; height:1px; background:var(--accent); }
+  .hero-name { font-size:clamp(3.2rem,9vw,9.5rem); font-weight:800; line-height:.9; letter-spacing:-.04em; margin-bottom:.3em; }
+  .hero-name .line { display:block; overflow:hidden; }
+  .hero-name .line span { display:block; animation:slideUp .8s cubic-bezier(.16,1,.3,1) both; }
+  .hero-name .line:nth-child(2) span { animation-delay:.08s; }
+  .hero-name .line:nth-child(3) span { animation-delay:.16s; }
+  .hero-name .accent-dot { color:var(--accent); }
+  @keyframes slideUp { from{transform:translateY(110%);opacity:0} to{transform:translateY(0);opacity:1} }
+  .hero-bottom { display:flex; justify-content:space-between; align-items:flex-end; margin-top:2.5rem; }
+  .hero-desc { max-width:380px; font-size:.95rem; line-height:1.8; color:var(--fg2); font-family:var(--font-mono); font-weight:300; }
+  .hero-roles { display:flex; gap:.6rem; flex-wrap:wrap; margin-bottom:1rem; }
+  .hero-role-badge { font-family:var(--font-mono); font-size:.7rem; letter-spacing:.08em; text-transform:uppercase; color:var(--fg3); border:1px solid var(--border2); padding:.25rem .7rem; border-radius:2px; }
+  .hero-scroll { font-family:var(--font-mono); font-size:.72rem; color:var(--fg3); letter-spacing:.1em; text-transform:uppercase; display:flex; align-items:center; gap:.5rem; }
+  .hero-scroll::after { content:''; display:block; width:1px; height:48px; background:linear-gradient(to bottom,var(--fg3),transparent); animation:scrollLine 2s ease-in-out infinite; }
+  @keyframes scrollLine { 0%,100%{opacity:.3;transform:scaleY(1)} 50%{opacity:1;transform:scaleY(1.2)} }
+
+  .marquee-wrap { border-top:1px solid var(--border); border-bottom:1px solid var(--border); padding:1rem 0; overflow:hidden; background:var(--bg2); }
+  .marquee-track { display:flex; width:max-content; animation:marquee 28s linear infinite; }
+  .marquee-track:hover { animation-play-state:paused; }
+  @keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+  .marquee-item { font-family:var(--font-mono); font-size:.75rem; letter-spacing:.1em; text-transform:uppercase; color:var(--fg3); padding:0 2rem; white-space:nowrap; }
+  .marquee-item b { color:var(--accent); font-weight:300; margin-right:2rem; }
+
+  section { padding:6rem 2.5rem; position:relative; }
+  .section-label { font-family:var(--font-mono); font-size:.72rem; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); margin-bottom:3rem; display:flex; align-items:center; gap:.75rem; }
+  .section-label::before { content:attr(data-num); color:var(--fg3); }
+
+  #about { display:grid; grid-template-columns:1fr 1fr; gap:4rem; align-items:start; border-top:1px solid var(--border); }
+  .about-heading { font-size:clamp(2rem,3.5vw,3rem); font-weight:800; letter-spacing:-.03em; line-height:1.05; margin-bottom:1.5rem; }
+  .about-heading em { font-style:italic; color:var(--accent); font-weight:400; }
+  .about-text { font-family:var(--font-mono); font-size:.87rem; line-height:1.95; color:var(--fg2); font-weight:300; margin-bottom:1.2rem; }
+  .about-stats { display:grid; grid-template-columns:repeat(3,1fr); gap:1.5rem; border-top:1px solid var(--border); padding-top:2rem; margin-top:2rem; }
+  .stat-num { font-size:2.2rem; font-weight:800; letter-spacing:-.04em; color:var(--accent); line-height:1; }
+  .stat-label { font-family:var(--font-mono); font-size:.7rem; color:var(--fg3); letter-spacing:.08em; text-transform:uppercase; margin-top:.4rem; }
+  .about-right-col { display:flex; flex-direction:column; gap:2rem; padding-top:5rem; }
+  .info-block { border:1px solid var(--border); padding:1.5rem; position:relative; }
+  .info-block::before { content:''; position:absolute; top:-1px; left:-1px; width:40px; height:40px; border-top:2px solid var(--accent); border-left:2px solid var(--accent); }
+  .info-block-label { font-family:var(--font-mono); font-size:.68rem; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); margin-bottom:1rem; }
+  .info-block-content { font-family:var(--font-mono); font-size:.82rem; color:var(--fg2); line-height:1.9; font-weight:300; }
+  .location-badge { display:inline-flex; align-items:center; gap:.5rem; font-family:var(--font-mono); font-size:.75rem; color:var(--fg2); border:1px solid var(--border2); padding:.4rem 1rem; border-radius:2px; margin-top:1.5rem; }
+  .location-dot { width:8px; height:8px; background:var(--accent); border-radius:50%; animation:pulse 2s ease-in-out infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(1.3)} }
+
+  #skills { border-top:1px solid var(--border); }
+  .skills-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:1px; background:var(--border); border:1px solid var(--border); margin-top:1rem; }
+  .skill-card { background:var(--bg); padding:2rem; transition:background .3s; position:relative; overflow:hidden; }
+  .skill-card:hover { background:var(--bg3); }
+  .skill-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:var(--accent); transform:scaleX(0); transform-origin:left; transition:transform .3s; }
+  .skill-card:hover::before { transform:scaleX(1); }
+  .skill-icon { font-size:1.8rem; margin-bottom:1rem; display:block; }
+  .skill-name { font-size:1rem; font-weight:700; margin-bottom:.75rem; letter-spacing:-.02em; }
+  .skill-list { font-family:var(--font-mono); font-size:.78rem; color:var(--fg2); line-height:2.1; list-style:none; }
+  .skill-list li::before { content:'→ '; color:var(--accent); }
+
+  #interests { border-top:1px solid var(--border); }
+  .interests-wrap { display:flex; flex-wrap:wrap; gap:.75rem; margin-top:1.5rem; }
+  .interest-pill { font-family:var(--font-mono); font-size:.8rem; letter-spacing:.06em; color:var(--fg2); border:1px solid var(--border2); padding:.5rem 1.2rem; border-radius:100px; transition:border-color .2s,color .2s,background .2s; cursor:none; }
+  .interest-pill:hover { border-color:var(--accent); color:var(--accent); background:rgba(200,245,90,.04); }
+
+  #experience { border-top:1px solid var(--border); }
+  .exp-block { border:1px solid var(--border); padding:2.5rem; position:relative; }
+  .exp-block::before { content:''; position:absolute; top:-1px; left:-1px; width:50px; height:50px; border-top:2px solid var(--accent); border-left:2px solid var(--accent); }
+  .exp-period { font-family:var(--font-mono); font-size:.72rem; color:var(--accent); letter-spacing:.1em; text-transform:uppercase; margin-bottom:1rem; }
+  .exp-role { font-size:1.6rem; font-weight:800; letter-spacing:-.03em; margin-bottom:.4rem; }
+  .exp-company { font-family:var(--font-mono); font-size:.85rem; color:var(--fg2); margin-bottom:1.5rem; font-weight:300; }
+  .exp-desc { font-family:var(--font-mono); font-size:.85rem; color:var(--fg2); line-height:1.9; font-weight:300; margin-bottom:1.5rem; }
+  .exp-focus-list { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:.5rem; }
+  .exp-focus-item { font-family:var(--font-mono); font-size:.78rem; color:var(--fg3); padding:.5rem .8rem; border:1px solid var(--border); display:flex; align-items:center; gap:.5rem; }
+  .exp-focus-item::before { content:'✦'; color:var(--accent); font-size:.6rem; }
+
+  #vision { border-top:1px solid var(--border); }
+  .vision-inner { max-width:860px; }
+  .vision-quote { font-size:clamp(1.4rem,3vw,2.5rem); font-weight:700; letter-spacing:-.03em; line-height:1.3; margin-bottom:2rem; }
+  .vision-quote em { color:var(--accent); font-style:italic; font-weight:400; }
+  .vision-text { font-family:var(--font-mono); font-size:.9rem; color:var(--fg2); line-height:1.95; font-weight:300; }
+
+  #contact { border-top:1px solid var(--border); }
+  .contact-inner { display:flex; flex-direction:column; align-items:center; text-align:center; gap:2rem; }
+  .contact-heading { font-size:clamp(3rem,8vw,7rem); font-weight:800; letter-spacing:-.04em; line-height:.95; }
+  .contact-heading .outline { -webkit-text-stroke:1px var(--fg2); color:transparent; }
+  .contact-sub { font-family:var(--font-mono); font-size:.9rem; color:var(--fg2); font-weight:300; max-width:400px; line-height:1.8; }
+  .contact-links { display:flex; gap:1.5rem; flex-wrap:wrap; justify-content:center; margin-top:1rem; }
+  .contact-link { font-family:var(--font-mono); font-size:.8rem; letter-spacing:.08em; text-transform:uppercase; color:var(--fg2); text-decoration:none; padding-bottom:2px; border-bottom:1px solid var(--border2); transition:color .2s,border-color .2s; }
+  .contact-link:hover { color:var(--accent); border-color:var(--accent); }
+  .contact-btn { margin-top:1rem; padding:1.2rem 3rem; font-family:var(--font-head); font-size:1rem; font-weight:700; background:var(--accent); color:var(--bg); border:none; border-radius:2px; cursor:none; transition:transform .2s,background .2s; text-decoration:none; display:inline-block; }
+  .contact-btn:hover { background:var(--accent2); transform:scale(1.03); }
+  .contact-detail { font-family:var(--font-mono); font-size:.8rem; color:var(--fg3); letter-spacing:.06em; }
+
+  footer { border-top:1px solid var(--border); padding:2rem 2.5rem; display:flex; justify-content:space-between; align-items:center; }
+  footer p { font-family:var(--font-mono); font-size:.72rem; color:var(--fg3); letter-spacing:.06em; }
+  footer a { color:var(--accent); text-decoration:none; }
+
+  .reveal { opacity:0; transform:translateY(30px); transition:opacity .7s ease,transform .7s ease; }
+  .reveal.visible { opacity:1; transform:none; }
+
+  @media(max-width:768px) {
+    #about { grid-template-columns:1fr; }
+    .about-right-col { padding-top:0; }
+    nav { padding:1.2rem 1.5rem; }
+    section { padding:4rem 1.5rem; }
+    #hero { padding:0 1.5rem 3rem; }
+    footer { flex-direction:column; gap:.5rem; text-align:center; }
+    .nav-links { display:none; }
+  }
+</style>
+</head>
+<body>
+
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="nav-logo">AK<span>.</span></a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#vision">Vision</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="mailto:khusagy@gmail.com" class="nav-cta">Get in touch</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-grid-bg"></div>
+  <div class="hero-tag">Based in Muscat, Oman — Open to opportunities</div>
+  <h1 class="hero-name">
+    <span class="line"><span>Adnan</span></span>
+    <span class="line"><span>Khusagy<span class="accent-dot">.</span></span></span>
+  </h1>
+  <div class="hero-bottom">
+    <div>
+      <div class="hero-roles">
+        <span class="hero-role-badge">Entrepreneur</span>
+        <span class="hero-role-badge">Tech Enthusiast</span>
+        <span class="hero-role-badge">CS Graduate</span>
+      </div>
+      <p class="hero-desc">Building at the intersection of technology, creativity, and business — where digital innovation meets real-world impact.</p>
+    </div>
+    <div class="hero-scroll">Scroll</div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track" id="marqueeTrack"></div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-left reveal">
+    <div class="section-label" data-num="01">About me</div>
+    <h2 class="about-heading">Where <em>tech</em> meets<br>entrepreneurship</h2>
+    <p class="about-text">
+      I'm a Computer Science & Engineering graduate from North South University with a deep passion for modern technology, digital innovation, and business development.
+    </p>
+    <p class="about-text">
+      My journey began with programming and technology exploration — and evolved into entrepreneurship. I now manage my own business while staying deeply connected with the fast-moving world of tech.
+    </p>
+    <p class="about-text">
+      I work with modern digital tools, AI technologies, and creative systems that blend functionality with clean design. Especially drawn to smart automation, emerging tech, and building experiences that feel seamless and future-ready.
+    </p>
+    <div class="about-stats">
+      <div>
+        <div class="stat-num">CSE</div>
+        <div class="stat-label">Graduate</div>
+      </div>
+      <div>
+        <div class="stat-num">AI</div>
+        <div class="stat-label">Focused</div>
+      </div>
+      <div>
+        <div class="stat-num">OM</div>
+        <div class="stat-label">Muscat</div>
+      </div>
+    </div>
+  </div>
+  <div class="about-right-col reveal" style="transition-delay:.15s">
+    <div class="info-block">
+      <div class="info-block-label">Education</div>
+      <div class="info-block-content">
+        <strong style="color:var(--fg);font-weight:600;">North South University</strong><br>
+        Bachelor of Science in<br>Computer Science & Engineering (CSE)
+      </div>
+    </div>
+    <div class="info-block">
+      <div class="info-block-label">Currently</div>
+      <div class="info-block-content">
+        Running my own business, integrating technology-driven solutions and modern digital tools into daily operations.
+      </div>
+    </div>
+    <div class="info-block">
+      <div class="info-block-label">Contact</div>
+      <div class="info-block-content">
+        <a href="mailto:khusagy@gmail.com" style="color:var(--accent);text-decoration:none;">khusagy@gmail.com</a><br>
+        <a href="tel:+96878879905" style="color:var(--fg2);text-decoration:none;">+968 78879905</a><br>
+        <a href="https://www.instagram.com/ninad_khusagy/" target="_blank" style="color:var(--fg2);text-decoration:none;">@ninad_khusagy</a>
+      </div>
+    </div>
+    <div class="location-badge">
+      <span class="location-dot"></span>
+      Muscat, Oman
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-label" data-num="02">Skills & Tools</div>
+  <div class="skills-grid">
+    <div class="skill-card reveal">
+      <span class="skill-icon">⬡</span>
+      <div class="skill-name">Programming & Software</div>
+      <ul class="skill-list">
+        <li>Programming Fundamentals</li>
+        <li>Software Development</li>
+        <li>Digital Systems</li>
+        <li>Productivity Tools</li>
+      </ul>
+    </div>
+    <div class="skill-card reveal" style="transition-delay:.08s">
+      <span class="skill-icon">◈</span>
+      <div class="skill-name">AI & Automation</div>
+      <ul class="skill-list">
+        <li>AI Tools & Platforms</li>
+        <li>Digital Automation</li>
+        <li>Smart Workflow Design</li>
+        <li>Technology Research</li>
+      </ul>
+    </div>
+    <div class="skill-card reveal" style="transition-delay:.16s">
+      <span class="skill-icon">◎</span>
+      <div class="skill-name">Business & Operations</div>
+      <ul class="skill-list">
+        <li>Business Management</li>
+        <li>Customer Engagement</li>
+        <li>Brand & Online Presence</li>
+        <li>Creative Problem Solving</li>
+      </ul>
+    </div>
+    <div class="skill-card reveal" style="transition-delay:.24s">
+      <span class="skill-icon">⬜</span>
+      <div class="skill-name">Design & Creativity</div>
+      <ul class="skill-list">
+        <li>Photoshop & Digital Design</li>
+        <li>UI/UX Sensibility</li>
+        <li>Modern Tech Solutions</li>
+        <li>Visual Storytelling</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- INTERESTS -->
+<section id="interests">
+  <div class="section-label" data-num="03">Interests</div>
+  <h2 class="about-heading reveal" style="margin-bottom:1rem;">What drives<br>my <em>curiosity</em></h2>
+  <div class="interests-wrap reveal" style="transition-delay:.1s">
+    <span class="interest-pill">Artificial Intelligence</span>
+    <span class="interest-pill">Modern Gadgets & Smart Tech</span>
+    <span class="interest-pill">Software & Digital Innovation</span>
+    <span class="interest-pill">Entrepreneurship</span>
+    <span class="interest-pill">Automotive Technology</span>
+    <span class="interest-pill">UI/UX & Clean Design</span>
+    <span class="interest-pill">Future Tech Ecosystems</span>
+    <span class="interest-pill">Smart Automation</span>
+    <span class="interest-pill">Digital Experiences</span>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="section-label" data-num="04">Experience</div>
+  <div class="exp-block reveal">
+    <div class="exp-period">Present</div>
+    <div class="exp-role">Business Owner</div>
+    <div class="exp-company">Self-Employed — Muscat, Oman</div>
+    <div class="exp-desc">Running and managing my own business while integrating technology-driven solutions and modern digital tools into daily operations. Focused on building sustainable systems that combine smart technology with efficient business practices.</div>
+    <div class="exp-focus-list">
+      <div class="exp-focus-item">Business Operations Management</div>
+      <div class="exp-focus-item">Customer Engagement</div>
+      <div class="exp-focus-item">Digital Workflow Improvement</div>
+      <div class="exp-focus-item">Technology Integration</div>
+      <div class="exp-focus-item">Brand & Online Presence</div>
+    </div>
+  </div>
+</section>
+
+<!-- VISION -->
+<section id="vision">
+  <div class="section-label" data-num="05">Personal Vision</div>
+  <div class="vision-inner">
+    <div class="vision-quote reveal">
+      "Technology should feel<br><em>seamless, intelligent,</em><br>and human-centered."
+    </div>
+    <p class="vision-text reveal" style="transition-delay:.15s">
+      My goal is to continue growing as an entrepreneur while exploring innovative ways to combine business, creativity, and modern technology into impactful digital experiences. I believe in building things that are simple, efficient, and future-ready — not just functional, but beautifully so.
+    </p>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-inner">
+    <div class="section-label" data-num="06" style="margin-bottom:0">Let's connect</div>
+    <h2 class="contact-heading reveal">
+      Let's build<br><span class="outline">something</span><br>together.
+    </h2>
+    <p class="contact-sub reveal">Open to collaborations, conversations about tech, business, or just a good idea worth exploring.</p>
+    <div class="contact-links reveal">
+      <a href="mailto:khusagy@gmail.com" class="contact-link">Email</a>
+      <a href="https://www.instagram.com/ninad_khusagy/" target="_blank" class="contact-link">Instagram</a>
+      <a href="tel:+96878879905" class="contact-link">Phone</a>
+    </div>
+    <a href="mailto:khusagy@gmail.com" class="contact-btn reveal">Say hello →</a>
+    <p class="contact-detail reveal" style="transition-delay:.2s">khusagy@gmail.com &nbsp;·&nbsp; +968 78879905 &nbsp;·&nbsp; Muscat, Oman</p>
+  </div>
+</section>
+
+<footer>
+  <p>© 2025 Adnan Khusagy. All rights reserved.</p>
+  <p>Built with <a href="#">precision & passion</a>.</p>
+</footer>
+
+<script>
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursor-ring');
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px'; cursor.style.top = e.clientY + 'px';
+    ring.style.left = e.clientX + 'px'; ring.style.top = e.clientY + 'px';
+  });
+
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 60));
+
+  const items = ['AI & Automation','✦','Entrepreneurship','✦','Tech Innovation','✦','Digital Design','✦','Smart Systems','✦','Business Dev','✦','UI/UX','✦','Future Tech','✦','CS Graduate','✦','Muscat, Oman','✦'];
+  const track = document.getElementById('marqueeTrack');
+  track.innerHTML = [...items,...items].map(item =>
+    `<span class="marquee-item">${item==='✦'?'<b>✦</b>':item}</span>`
+  ).join('');
+
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if(e.isIntersecting){e.target.classList.add('visible');observer.unobserve(e.target);} });
+  }, {threshold:.1, rootMargin:'0px 0px -50px 0px'});
+  reveals.forEach(r => observer.observe(r));
+</script>
+</body>
+</html>
